@@ -1,0 +1,5 @@
+(library
+ (name passify)
+ (libraries async core passify_types textutils.ascii_table)
+ (preprocess (pps ppx_let))
+)

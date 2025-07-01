@@ -1,0 +1,4 @@
+(executable
+ (public_name passify)
+ (name main)
+ (libraries core_unix.command_unix passify))

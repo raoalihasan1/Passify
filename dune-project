@@ -15,6 +15,6 @@
  (name passify)
  (synopsis "A CLI application for determining the strength of a password")
  (description "Determine the strength of your password based on a set of defined rules")
- (depends ocaml dune)
+ (depends async ocaml core dune)
  (tags
   (password strength security)))

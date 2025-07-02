@@ -9,7 +9,9 @@ tags: ["password" "strength" "security"]
 homepage: "https://github.com/raoalihasan1/passify"
 bug-reports: "https://github.com/raoalihasan1/passify/issues"
 depends: [
+  "async"
   "ocaml"
+  "core"
   "dune" {>= "3.19"}
   "odoc" {with-doc}
 ]

@@ -45,6 +45,48 @@ module Conditions = struct
     | `Uppercase_and_lowercase -> "Use Upper & Lowercase Letters"
     | `Numbers_and_symbols -> "Use Numbers & Symbols"
     | `Not_in_dict -> "Use Words Not In The Dictionary"
+
+  let%expect_test "Password is at least 12 characters in length" =
+    Deferred.map (checker `At_least_12_chars "Kitten1!") ~f:(fun res ->
+        print_endline (string_of_bool res);
+        [%expect {| false |}])
+
+  let%expect_test "Password is at least 12 characters in length" =
+    Deferred.map (checker `At_least_12_chars "KittensAreNice1!") ~f:(fun res ->
+        print_endline (string_of_bool res);
+        [%expect {| true |}])
+
+  let%expect_test "Password contains uppercase and lowercase characters" =
+    Deferred.map (checker `Uppercase_and_lowercase "no_uppercase_chars")
+      ~f:(fun res ->
+        print_endline (string_of_bool res);
+        [%expect {| false |}])
+
+  let%expect_test "Password contains uppercase and lowercase characters" =
+    Deferred.map (checker `Uppercase_and_lowercase "Upper_and_Lower")
+      ~f:(fun res ->
+        print_endline (string_of_bool res);
+        [%expect {| true |}])
+
+  let%expect_test "Password contains numbers and symbols" =
+    Deferred.map (checker `Numbers_and_symbols "Kitten") ~f:(fun res ->
+        print_endline (string_of_bool res);
+        [%expect {| false |}])
+
+  let%expect_test "Password contains numbers and symbols" =
+    Deferred.map (checker `Numbers_and_symbols "Kitten1") ~f:(fun res ->
+        print_endline (string_of_bool res);
+        [%expect {| false |}])
+
+  let%expect_test "Password contains numbers and symbols" =
+    Deferred.map (checker `Numbers_and_symbols "Kitten!") ~f:(fun res ->
+        print_endline (string_of_bool res);
+        [%expect {| false |}])
+
+  let%expect_test "Password contains numbers and symbols" =
+    Deferred.map (checker `Numbers_and_symbols "Kitten1!") ~f:(fun res ->
+        print_endline (string_of_bool res);
+        [%expect {| true |}])
 end
 
 type t = Conditions.t list [@@deriving sexp]
@@ -59,3 +101,9 @@ let not_satisfied_to_string t =
   t |> List.map ~f:Conditions.to_string |> String.concat ~sep:"\n"
 
 let no_not_satisfied = List.length
+
+let%expect_test "Returns a list of all the conditions not satisfied" =
+  Deferred.map (not_satisfied "Kitten1") ~f:(fun conds_not_satisfied ->
+      print_s [%message (conds_not_satisfied : Conditions.t list)];
+      [%expect
+        {| (conds_not_satisfied (At_least_12_chars Numbers_and_symbols Not_in_dict)) |}])

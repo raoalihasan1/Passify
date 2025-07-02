@@ -1,5 +1,6 @@
 (library
  (name passify_types)
+ (inline_tests)
  (libraries async cohttp cohttp-async core jsonaf uri)
- (preprocess (pps ppx_enumerate ppx_fields_conv ppx_sexp_conv ppx_string ppx_string_conv))
+ (preprocess (pps ppx_enumerate ppx_expect ppx_fields_conv ppx_sexp_conv ppx_sexp_message ppx_string ppx_string_conv))
 )
